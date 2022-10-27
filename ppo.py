@@ -28,7 +28,7 @@ class PPOAgent:
         self.model = config.model(config).to(self.device)
 
         if config.checkpoint_path is not None:
-            self.model.load_state_dict(torch.load(config.checkpoint_path))
+            self.model.load_state_dict(torch.load(config.checkpoint_path, map_location=torch.device('cpu')))
             print("Model was loaded from checkpoint!")
 
         self.model_old = config.model(config).to(self.device)
@@ -59,17 +59,15 @@ class PPOAgent:
         if self.epsilon_annealing:
             epsilon_now = self.epsilon * frac
 
-        # Calculate advantage and discounted returns using rewards collected from environments
-        # self.mem.calculate_advantage(last_value, next_done)
         self.mem.calculate_advantage_gae(last_value, next_done)
 
         for i in range(num_learn):
-            # iterate over mini_batches
             for mini_batch_idx in self.mem.get_mini_batch_idxs(mini_batch_size=256):
 
                 # Grab sample from memory
                 prev_states, prev_actions, prev_log_probs, discounted_returns, advantage, prev_values = self.mem.sample(
-                    mini_batch_idx)
+                    mini_batch_idx
+                )
                 advantages = (advantage - advantage.mean()) / (advantage.std() + 1e-8)
 
                 # find ratios

@@ -14,7 +14,7 @@ from envs import make_env, VecPyTorch
 from ppo import PPOAgent
 
 ENV_ID = "BreakoutNoFrameskip-v4"
-SAVE_PATH = "./checkpoints"
+SAVE_PATH = "./checkpoints_ppo"
 
 
 def train(config: Config):

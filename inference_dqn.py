@@ -8,10 +8,10 @@ from memory import Memory
 from models import ActorCritic
 from networks import CnnHeadModel, ActorModel, CriticModel
 from envs import make_env, VecPyTorch
-from ppo import PPOAgent
+from dqn import DQNAgent
 
 ENV_ID = "BreakoutNoFrameskip-v4"
-CHECKPOINT_PATH = "./checkpoints/checkpoint_30720.pth"
+CHECKPOINT_PATH = "./checkpoints_dqn/checkpoint_3072.pth"
 
 
 def inference(config: Config):
@@ -23,14 +23,13 @@ def inference(config: Config):
         config.device
     )
 
-    agent = PPOAgent(config)
+    agent = DQNAgent(config)
 
     states = envs.reset()
 
     while True:
-
         with torch.no_grad():
-            actions, log_probs, values, entrs = agent.act(states)
+            actions, _, _, _ = agent.act(states)
 
         envs.render()
 

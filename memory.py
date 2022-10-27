@@ -38,7 +38,10 @@ class Memory:
         self.states[self.idx] = states
         self.actions[self.idx] = actions
         self.rewards[self.idx] = torch.FloatTensor(rewards.reshape(-1)).to(self.device)
-        self.log_probs[self.idx] = log_probs.reshape(-1).to(self.device)
+
+        if log_probs is not None:
+            self.log_probs[self.idx] = log_probs.reshape(-1).to(self.device)
+
         self.values[self.idx] = values.reshape(-1).to(self.device)
         self.dones[self.idx] = torch.FloatTensor(dones.reshape(-1)).to(self.device)
 
