@@ -127,6 +127,9 @@ def main():
 
     final_score, _ = train(config)
 
+    with open('final_score_dqn.txt', 'w') as f:
+        f.write(' '.join(list(map(str, final_score))))
+
     print("Final global score: {}".format(final_score))
 
 
